@@ -1,23 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
 function App() {
+  const [status, setStatus] = useState('Ready to test');
+  
+  const testAPI = async () => {
+    try {
+      const response = await fetch(process.env.REACT_APP_API_URL + '/health');
+      const data = await response.json();
+      setStatus('✅ Connected: ' + data.message);
+    } catch (error) {
+      setStatus('❌ Failed: ' + error.message);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div style={{
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      minHeight: '100vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontFamily: 'sans-serif'
+    }}>
+      <div style={{
+        background: 'white',
+        padding: '2rem',
+        borderRadius: '12px',
+        textAlign: 'center',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+      }}>
+        <h1 style={{color: '#333'}}>🚀 InvoiceFlow</h1>
+        <p style={{color: '#666', margin: '1rem 0'}}>{status}</p>
+        <button 
+          onClick={testAPI}
+          style={{
+            background: '#667eea',
+            color: 'white',
+            border: 'none',
+            padding: '12px 24px',
+            borderRadius: '8px',
+            fontSize: '16px',
+            cursor: 'pointer'
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          Test Backend Connection
+        </button>
+      </div>
     </div>
   );
 }
